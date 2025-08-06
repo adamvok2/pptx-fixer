@@ -28,27 +28,34 @@ def fix_pptx(file):
                             for run in p.runs:
                                 run.text = transform_text(run.text)
     tmpdir = tempfile.mkdtemp()
-    output_path = os.path.join(tmpdir, 'fixed.pptx')
-    prs.save(output_path)
-    return output_path
+    return prs, tmpdir
 
-st.title("📊 PPTX Fixer - AFGC")
+st.title("📊 PPTX Fixer: Remove @...@, Keep (Stuff)")
 
 st.markdown(
     """
     🔒 **Privacy Notice**
 
-    - Your file is processed securely **in memory** and **never stored**.
+    - Your files are processed securely **in memory** and **never stored**.
     - No data is logged, saved, or sent to any external service.
     - Once the session ends or the browser is closed, all data is wiped.
     """
 )
 
+uploaded_files = st.file_uploader("Upload one or more .pptx files", type=["pptx"], accept_multiple_files=True)
 
-uploaded_file = st.file_uploader("Upload a .pptx file", type=["pptx"])
+if uploaded_files:
+    for uploaded_file in uploaded_files:
+        with st.spinner(f"Fixing: {uploaded_file.name}"):
+            prs, tmpdir = fix_pptx(uploaded_file)
+            output_filename = uploaded_file.name.replace('.pptx', '_fixed.pptx')
+            output_path = os.path.join(tmpdir, output_filename)
+            prs.save(output_path)
 
-if uploaded_file:
-    with st.spinner("Fixing file..."):
-        fixed_path = fix_pptx(uploaded_file)
-        with open(fixed_path, 'rb') as f:
-            st.download_button("Download Fixed File", f, file_name="fixed.pptx", mime="application/vnd.openxmlformats-officedocument.presentationml.presentation")
+            with open(output_path, 'rb') as f:
+                st.download_button(
+                    label=f"Download {output_filename}",
+                    data=f,
+                    file_name=output_filename,
+                    mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                )
