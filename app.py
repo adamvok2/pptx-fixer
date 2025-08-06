@@ -32,7 +32,18 @@ def fix_pptx(file):
     prs.save(output_path)
     return output_path
 
-st.title("📊 PPTX Fixer: Remove @...@, Keep (Stuff)")
+st.title("📊 PPTX Fixer - AFGC")
+
+st.markdown(
+    """
+    🔒 **Privacy Notice**
+
+    - Your file is processed securely **in memory** and **never stored**.
+    - No data is logged, saved, or sent to any external service.
+    - Once the session ends or the browser is closed, all data is wiped.
+    """
+)
+
 
 uploaded_file = st.file_uploader("Upload a .pptx file", type=["pptx"])
 
