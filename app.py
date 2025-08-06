@@ -30,7 +30,7 @@ def fix_pptx(file):
     tmpdir = tempfile.mkdtemp()
     return prs, tmpdir
 
-st.title("📊 PPTX Fixer: Remove @...@, Keep (Stuff)")
+st.title("📊 AFGC PPTX Fixer")
 
 st.markdown(
     """
